@@ -20,9 +20,9 @@ spec:
         ports:
         - containerPort: 80
         volumeMounts:
-        - name: nginx1-storage
+        - name: nginx-storage
           mountPath: /usr/share/nginx/html   # NGINX default web root
       volumes:
-      - name: nginx1-storage
+      - name: nginx-storage
         persistentVolumeClaim:
-          claimName: nginx1-pvc
+          claimName: nginx-pvc
