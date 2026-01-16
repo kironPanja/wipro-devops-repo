@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx1-deployment
   labels:
     app: nginx
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: nginx
+      app: nginx-bew
   template:
     metadata:
       labels:
-        app: nginx
+        app: nginx-new
     spec:
       containers:
-        - name: nginx-container
+        - name: nginx1-container
           image: nginx:latest
           ports:
             - containerPort: 80
           volumeMounts:
-            - name: nginx-storage
+            - name: nginx1-storage
               mountPath: /usr/share/nginx/html   # NGINX default web root
       volumes:
-        - name: nginx-storage
+        - name: nginx1-storage
           persistentVolumeClaim:
-            claimName: nginx-pvc
+            claimName: nginx1-pvc
