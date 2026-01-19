@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Basic HTML Starter</title>
+  <style>
+    :root { --bg: #0f172a; --card: #111827; --text: #e5e7eb; --accent: #38bdf8; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      background: linear-gradient(135deg, var(--bg), #1f2937);
+      color: var(--text);
+      display: grid; place-items: center; min-height: 100vh; padding: 24px;
+    }
+    .card {
+      width: 100%; max-width: 720px; background: var(--card); border: 1px solid #1f2937; border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35); overflow: hidden;
+    }
+    header { padding: 20px 24px; border-bottom: 1px solid #1f2937; display: flex; align-items: center; gap: 12px; }
+    header .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); }
+    header h1 { margin: 0; font-size: 1.25rem; letter-spacing: 0.3px; }
+    main { padding: 24px; display: grid; gap: 16px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px;
+      background: #0ea5e9; color: white; border: none; cursor: pointer; font-weight: 600;
+      box-shadow: 0 6px 16px rgba(14,165,233,0.35); transition: transform 120ms ease, box-shadow 120ms ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(14,165,233,0.45); }
+    .note { font-size: 0.95rem; color: #cbd5e1; }
+    footer { padding: 18px 24px; border-top: 1px solid #1f2937; font-size: 0.9rem; color: #94a3b8; }
+    code { background: #0b1220; color: #cbd5e1; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="card" role="region" aria-label="Basic HTML Starter">
+    <header>
+      <span class="dot" aria-hidden="true"></span>
+      <h1>Welcome 👋</h1>
+    </header>
+
+    <main>
+      <p class="note">
+        This is a clean starter HTML file with minimal CSS and a tiny script.
+        Edit the <code>&lt;title&gt;</code>, content, and styles to make it yours.
+      </p>
+
+      <button class="btn" id="helloBtn" aria-label="Say hello">
+        <span>Say Hello</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 3v18M3 12h18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <div id="output" class="note" aria-live="polite"></div>
+    </main>
+
+    <footer>
+      Built with HTML, CSS, and a sprinkle of JavaScript.
+    </footer>
+  </div>
+
+  <script>
+    const btn = document.getElementById('helloBtn');
+    const out = document.getElementById('output');
+
+    btn.addEventListener('click', () => {
+      const now = new Date().toLocaleString();
+      out.textContent = `Hello, Kiron! It’s ${now}.`;
+    });
+  </script>
+</body>
+</html>
