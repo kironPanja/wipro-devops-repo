@@ -2,48 +2,61 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/kironPanja/wipro-devops-repo.git'
-        BRANCH = 'main'
-        WORK_DIR = 'wipro-devops-repo'
+        LOCAL_DIR = 'C:/Users/kiron/Desktop/Code-Commit-New' // Change to your actual local path
+        REPO_DIR = 'wipro-devops-repo'
+        GIT_URL = 'https://github.com/kironPanja/wipro-devops-repo.git'
+        GIT_CREDENTIALS_ID = 'your-jenkins-git-credentials-id' // Set this up in Jenkins
     }
 
     stages {
-        stage('Clone Repository') {
+        stage('Prepare Workspace') {
             steps {
-                git branch: "${BRANCH}", url: "${REPO_URL}"
+                echo 'Cleaning workspace...'
+                deleteDir()
             }
         }
 
-        stage('List HTML Files') {
+        stage('Copy Local Files') {
             steps {
-                script {
-                    def htmlFiles = sh(script: "find . -name '*.html'", returnStdout: true).trim()
-                    echo "HTML Files Found:\n${htmlFiles}"
+                echo "Copying files from ${LOCAL_DIR}..."
+                bat "xcopy /E /I /Y \"${LOCAL_DIR}\" \"${REPO_DIR}\""
+            }
+        }
+
+        stage('Initialize Git Repo') {
+            steps {
+                dir("${REPO_DIR}") {
+                    bat '''
+                    git init
+                    git remote add origin %GIT_URL%
+                    git add .
+                    git commit -m "Automated commit from Jenkins"
+                    '''
                 }
             }
         }
 
-        stage('Validate HTML') {
+        stage('Push to GitHub') {
             steps {
-                // Optional: Use a tool like htmlhint or tidy for validation
-                echo 'Validating HTML files...'
-                // Example: sh 'htmlhint .'
-            }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                archiveArtifacts artifacts: '**/*.html', fingerprint: true
+                dir("${REPO_DIR}") {
+                    withCredentials([usernamePassword(credentialsId: "${GIT_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        bat '''
+                        git config user.name "%GIT_USER%"
+                        git config user.email "jenkins@example.com"
+                        git push https://%GIT_USER%:%GIT_PASS%@github.com/kironPanja/wipro-devops-repo.git main
+                        '''
+                    }
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully.'
+            echo 'Files successfully pushed to GitHub!'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Pipeline failed. Check logs for details.'
         }
     }
 }
